@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Message</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; background: #f6f8fa; }
+      .container { max-width: 720px; margin: 0 auto; padding: 24px; }
+      .card { background: white; border-radius: 8px; border: 1px solid #d0d7de; padding: 16px; }
+      ul { list-style: none; padding: 0; margin: 0 0 16px; max-height: 420px; overflow-y: auto; }
+      li { border-bottom: 1px solid #d8dee4; padding: 8px 0; }
+      .meta { color: #57606a; font-size: 12px; }
+      form { display: grid; gap: 8px; }
+      input, button { padding: 10px; border: 1px solid #d0d7de; border-radius: 6px; }
+      button { background: #2f81f7; border: 0; color: white; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="container"></div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script type="module">
+      import React, { useEffect, useMemo, useState } from 'https://esm.sh/react@18.3.1';
+      import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
+
+      function App() {
+        const socket = useMemo(() => io(), []);
+        const [messages, setMessages] = useState([]);
+        const [username, setUsername] = useState('');
+        const [text, setText] = useState('');
+        const [error, setError] = useState('');
+
+        useEffect(() => {
+          socket.on('chat:history', (history) => setMessages(history));
+          socket.on('chat:message', (message) => {
+            setMessages((current) => [...current, message]);
+          });
+
+          return () => {
+            socket.disconnect();
+          };
+        }, [socket]);
+
+        const onSubmit = (event) => {
+          event.preventDefault();
+          setError('');
+          socket.emit('chat:send', { username, text }, (response) => {
+            if (!response?.ok) {
+              setError(response?.message || 'Message failed to send.');
+              return;
+            }
+
+            setText('');
+          });
+        };
+
+        return React.createElement(
+          'div',
+          { className: 'card' },
+          React.createElement('h1', null, 'Real-time Messenger'),
+          React.createElement(
+            'ul',
+            null,
+            messages.map((message) =>
+              React.createElement(
+                'li',
+                { key: message._id || `${message.username}-${message.createdAt}` },
+                React.createElement('strong', null, message.username),
+                React.createElement('p', null, message.text),
+                React.createElement('div', { className: 'meta' }, new Date(message.createdAt).toLocaleString())
+              )
+            )
+          ),
+          React.createElement(
+            'form',
+            { onSubmit },
+            React.createElement('input', {
+              placeholder: 'Username',
+              value: username,
+              onChange: (event) => setUsername(event.target.value),
+              maxLength: 40,
+              required: true,
+            }),
+            React.createElement('input', {
+              placeholder: 'Type a message',
+              value: text,
+              onChange: (event) => setText(event.target.value),
+              maxLength: 1000,
+              required: true,
+            }),
+            error ? React.createElement('small', { style: { color: '#d1242f' } }, error) : null,
+            React.createElement('button', { type: 'submit' }, 'Send')
+          )
+        );
+      }
+
+      createRoot(document.getElementById('root')).render(React.createElement(App));
+    </script>
+  </body>
+</html>

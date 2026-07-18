@@ -1,0 +1,36 @@
+{
+  "name": "chatmessage",
+  "version": "1.0.0",
+  "description": "Real-time messenger using MongoDB, Express, React, Node.js, and Socket.io",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djembaraa/chatmessage.git"
+  },
+  "keywords": [
+    "mern",
+    "socket.io",
+    "chat"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/djembaraa/chatmessage/issues"
+  },
+  "homepage": "https://github.com/djembaraa/chatmessage#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.7.4",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
