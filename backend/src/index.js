@@ -6,6 +6,10 @@ import { connectDB } from "./lib/db.js";
 const app = express();
 const PORT = process.env.PORT
 
+// test route to check if the server is running restfully
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "OK", message: "Server is running smoothly" });
+});
 
 app.listen(PORT, () => {
     connectDB(); // Call the connectDB function to establish a connection to the database
