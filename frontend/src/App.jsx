@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Show, SignInButton, SignUpButton, UserButton } from '@clerk/react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -9,6 +10,17 @@ function App() {
 
   return (
     <>
+      <header style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
+        <Show when="signed-out">
+          <div style={{ gap: '1rem', display: 'flex' }}>
+            <SignInButton mode="modal" />
+            <SignUpButton mode="modal" />
+          </div>
+        </Show>
+        <Show when="signed-in">
+          <UserButton />
+        </Show>
+      </header>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
