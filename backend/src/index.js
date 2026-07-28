@@ -14,7 +14,7 @@ const app = express();
 const PORT = process.env.PORT
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
-const publicDir = path.join(process.cwd(), "public");
+const publicDir = path.join(process.cwd(), "dist");
 
 app.use(express.json());
 app.use(cors({
