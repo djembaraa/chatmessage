@@ -16,6 +16,9 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const publicDir = path.join(process.cwd(), "dist");
 
+// its important to import the cron job after the express app is created, otherwise it will throw an error
+app.use("/api/webhooks/clerk", express.raw({ type: "application/json" }), clerkWebhook);
+
 app.use(express.json());
 app.use(cors({
     origin: FRONTEND_URL,
