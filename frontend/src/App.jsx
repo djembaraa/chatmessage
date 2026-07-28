@@ -7,8 +7,8 @@ function App() {
       <h1>Welcome to My App</h1>
       <header>
         <Show when="signed-out">
-          <SignInButton />
-          <SignUpButton />
+          <SignInButton mode="modal" />
+          <SignUpButton mode="modal" />
         </Show>
         <Show when="signed-in">
           <UserButton />
